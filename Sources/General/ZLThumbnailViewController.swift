@@ -92,6 +92,7 @@ class ZLThumbnailViewController: UIViewController {
         let btn = createBtn(localLanguageTextValue(.done), #selector(doneBtnClick), true)
         btn.layer.masksToBounds = true
         btn.layer.cornerRadius = ZLLayout.bottomToolBtnCornerRadius
+        btn.tag = 1024
         return btn
     }()
     
