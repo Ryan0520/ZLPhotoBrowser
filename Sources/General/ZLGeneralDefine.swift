@@ -144,7 +144,8 @@ func showAlertController(title: String?, message: String?, style: ZLCustomAlertS
     presentedVC?.zl.showAlertController(alert)
 }
 
-func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true) -> Bool {
+func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewController?, showAlert: Bool = true,
+                 isSelectedOriginal: Bool = false) -> Bool {
     let config = ZLPhotoConfiguration.default()
     
     guard config.canSelectAsset?(model.asset) ?? true else {
@@ -163,6 +164,16 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
        !config.allowMixSelect,
        model.type == .video{
         return false
+    }
+    
+    if let dataSize = model.dataSize, model.type == .image, isSelectedOriginal {
+        if dataSize > config.maxSelectImageDataSize {
+            if showAlert {
+                let message = String(format: localLanguageTextValue(.largerThanMaxImageDataSize), "\(Int(config.maxSelectImageDataSize/1024))")
+                showAlertView(message, sender)
+            }
+            return false
+        }
     }
     
     guard model.type == .video else {

@@ -255,6 +255,10 @@ public struct ZLLocalLanguageKey: Hashable {
     /// (不能选择小于%@MB的视频)
     public static let smallerThanMinVideoDataSize = ZLLocalLanguageKey(rawValue: "smallerThanMinVideoDataSize")
     
+    /// Can't select videos larger than %@MB
+    /// (不能选择大于%@MB的图片)
+    public static let largerThanMaxImageDataSize = ZLLocalLanguageKey(rawValue: "largerThanMaxImageDataSize")
+    
     /// Unable to sync from iCloud (iCloud无法同步)
     public static let iCloudVideoLoadFaild = ZLLocalLanguageKey(rawValue: "iCloudVideoLoadFaild")
     

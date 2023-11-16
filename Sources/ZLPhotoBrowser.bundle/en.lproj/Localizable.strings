@@ -29,6 +29,7 @@
 "shorterThanMinVideoDuration" = "Can't select videos shorter than %lds";
 "largerThanMaxVideoDataSize" = "Can't select videos larger than %@MB";
 "smallerThanMinVideoDataSize" = "Can't select videos smaller than %@MB";
+"largerThanMaxImageDataSize" = "Can't select image larger than %@MB";
 "exceededMaxVideoSelectCount" = "Max count for video selection: %ld";
 "lessThanMinVideoSelectCount" = "Min count for video selection: %ld";
 

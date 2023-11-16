@@ -29,6 +29,7 @@
 "shorterThanMinVideoDuration" = "不能选择低于%ld秒的视频";
 "largerThanMaxVideoDataSize" = "不能选择大于%@MB的视频";
 "smallerThanMinVideoDataSize" = "不能选择小于%@MB的视频";
+"largerThanMaxImageDataSize" = "不能选择大于%@MB的图片";
 "exceededMaxVideoSelectCount" = "最多只能选择%ld个视频";
 "lessThanMinVideoSelectCount" = "最少选择%ld个视频";
 

@@ -195,6 +195,7 @@ class ViewController: UIViewController {
           */
         ZLPhotoConfiguration.default()
             // You can first determine whether the asset is allowed to be selected.
+            .maxSelectImageDataSize(20 * 1024)
             .canSelectAsset { _ in true }
             .didSelectAsset { _ in }
             .didDeselectAsset { _ in }

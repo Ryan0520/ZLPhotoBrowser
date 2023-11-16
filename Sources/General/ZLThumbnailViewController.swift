@@ -627,7 +627,7 @@ class ZLThumbnailViewController: UIViewController {
                         return
                     }
                     
-                    if !(cell?.enableSelect ?? true) || !canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+                    if !(cell?.enableSelect ?? true) || !canAddModel(m, currentSelectCount: nav.arrSelectedModels.count, sender: self, isSelectedOriginal: nav.isSelectedOriginal) {
                         panSelectType = .none
                         return
                     }
@@ -985,7 +985,7 @@ class ZLThumbnailViewController: UIViewController {
         if config.maxSelectCount == 1, !uiConfig.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
-        if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false) {
+        if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false, isSelectedOriginal: nav?.isSelectedOriginal ?? false) {
             if !shouldDirectEdit(newModel) {
                 newModel.isSelected = true
                 nav?.arrSelectedModels.append(newModel)
@@ -1207,7 +1207,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         cell.selectedBlock = { [weak self, weak nav] block in
             if !model.isSelected {
                 let currentSelectCount = nav?.arrSelectedModels.count ?? 0
-                guard canAddModel(model, currentSelectCount: currentSelectCount, sender: self) else {
+                guard canAddModel(model, currentSelectCount: currentSelectCount, sender: self, isSelectedOriginal: nav?.isSelectedOriginal ?? false) else {
                     return
                 }
                 

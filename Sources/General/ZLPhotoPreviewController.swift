@@ -602,7 +602,7 @@ class ZLPhotoPreviewController: UIViewController {
             
             resetSubviewStatus()
         } else {
-            if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) {
+            if !canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self, isSelectedOriginal: nav.isSelectedOriginal) {
                 return
             }
             
@@ -718,7 +718,7 @@ class ZLPhotoPreviewController: UIViewController {
             return
         }
         
-        guard canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self) else {
+        guard canAddModel(currentModel, currentSelectCount: nav.arrSelectedModels.count, sender: self, isSelectedOriginal: nav.isSelectedOriginal) else {
             return
         }
         

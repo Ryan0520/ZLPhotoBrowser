@@ -197,6 +197,9 @@ public class ZLPhotoConfiguration: NSObject {
     /// Allow to choose the minimum duration of the video. Defaults to 0.
     public var minSelectVideoDuration: ZLPhotoConfiguration.Second = 0
     
+    /// Allow to choose the maximum data size of the image. Defaults to infinite.
+    public var maxSelectImageDataSize: ZLPhotoConfiguration.KBUnit = .greatestFiniteMagnitude
+    
     /// Allow to choose the maximum data size of the video. Defaults to infinite.
     public var maxSelectVideoDataSize: ZLPhotoConfiguration.KBUnit = .greatestFiniteMagnitude
     
