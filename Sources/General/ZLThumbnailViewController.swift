@@ -574,6 +574,14 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     @objc private func slideSelectAction(_ pan: UIPanGestureRecognizer) {
+        if pan.state == .ended || pan.state == .cancelled {
+            stopAutoScroll()
+            beginPanSelect = false
+            panSelectType = .none
+            arrSlideIndexPaths.removeAll()
+            return
+        }
+        
         let point = pan.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: point) else {
             return
