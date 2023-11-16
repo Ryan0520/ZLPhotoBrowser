@@ -598,6 +598,8 @@ class ZLThumbnailViewController: UIViewController {
             beginPanSelect = false
             panSelectType = .none
             arrSlideIndexPaths.removeAll()
+            dicOriSelectStatus.removeAll()
+            resetBottomToolBtnStatus()
             return
         }
         
@@ -742,13 +744,6 @@ class ZLThumbnailViewController: UIViewController {
                     }
                 }
             }
-        } else if pan.state == .ended || pan.state == .cancelled {
-            stopAutoScroll()
-            beginPanSelect = false
-            panSelectType = .none
-            arrSlideIndexPaths.removeAll()
-            dicOriSelectStatus.removeAll()
-            resetBottomToolBtnStatus()
         }
     }
     
