@@ -44,7 +44,7 @@ enum ZLLayout {
 }
 
 func markSelected(source: inout [ZLPhotoModel], selected: inout [ZLPhotoModel]) {
-    guard selected.count > 0 else {
+    guard !selected.isEmpty else {
         return
     }
     
@@ -162,7 +162,7 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
     
     if currentSelectCount > 0,
        !config.allowMixSelect,
-       model.type == .video{
+       model.type == .video {
         return false
     }
     
@@ -196,7 +196,7 @@ func canAddModel(_ model: ZLPhotoModel, currentSelectCount: Int, sender: UIViewC
         return false
     }
     
-    guard (config.minSelectVideoDataSize > 0 || config.maxSelectVideoDataSize != .greatestFiniteMagnitude),
+    guard config.minSelectVideoDataSize > 0 || config.maxSelectVideoDataSize != .greatestFiniteMagnitude,
           let size = model.dataSize else {
         return true
     }
@@ -261,7 +261,7 @@ func videoIsMeetRequirements(model: ZLPhotoModel) -> Bool {
         return false
     }
     
-    if (config.minSelectVideoDataSize > 0 || config.maxSelectVideoDataSize != .greatestFiniteMagnitude),
+    if config.minSelectVideoDataSize > 0 || config.maxSelectVideoDataSize != .greatestFiniteMagnitude,
        let dataSize = model.dataSize,
        !(config.minSelectVideoDataSize...config.maxSelectVideoDataSize ~= dataSize) {
         return false
