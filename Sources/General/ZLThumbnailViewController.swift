@@ -111,7 +111,7 @@ class ZLThumbnailViewController: UIViewController {
         let btn = UIButton(type: .custom)
         btn.setImage(.zl.getImage("zl_arrow_down"), for: .normal)
         btn.addTarget(self, action: #selector(scrollToBottomBtnClick), for: .touchUpInside)
-        btn.zl.addShadow(color: .zl.bottomToolViewBgColor, radius: 5, opacity: 1, offset: CGSize(width: 0, height: 5))
+        btn.zl.addShadow(color: .zl.rgba(35, 35, 35), radius: 5, opacity: 1, offset: CGSize(width: 0, height: 3))
         return btn
     }()
     
@@ -513,11 +513,10 @@ class ZLThumbnailViewController: UIViewController {
     
     private func shouldShowBottomToolBar() -> Bool {
         let config = ZLPhotoConfiguration.default()
-        let uiConfig = ZLPhotoUIConfiguration.default()
         let condition1 = config.editAfterSelectThumbnailImage &&
             config.maxSelectCount == 1 &&
             (config.allowEditImage || config.allowEditVideo)
-        let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !uiConfig.showSelectBtnWhenSingleSelect
+        let condition2 = config.allowPreviewPhotos && config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect
         let condition3 = !config.allowPreviewPhotos && config.maxSelectCount == 1
         if condition1 || condition2 || condition3 {
             return false
@@ -977,7 +976,7 @@ class ZLThumbnailViewController: UIViewController {
             canSelect = false
         }
         // 单选模式，且不显示选择按钮时，不允许选择
-        if config.maxSelectCount == 1, !uiConfig.showSelectBtnWhenSingleSelect {
+        if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
         if canSelect, canAddModel(newModel, currentSelectCount: nav?.arrSelectedModels.count ?? 0, sender: self, showAlert: false, isSelectedOriginal: nav?.isSelectedOriginal ?? false) {
@@ -1109,8 +1108,7 @@ class ZLThumbnailViewController: UIViewController {
 extension ZLThumbnailViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         let config = ZLPhotoConfiguration.default()
-        let uiConfig = ZLPhotoUIConfiguration.default()
-        if (config.maxSelectCount == 1 && !uiConfig.showSelectBtnWhenSingleSelect) || embedAlbumListView?.isHidden == false {
+        if (config.maxSelectCount == 1 && !config.showSelectBtnWhenSingleSelect) || embedAlbumListView?.isHidden == false {
             return false
         }
         
@@ -1234,7 +1232,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             }
         }
         
-        if uiConfig.showSelectedIndex,
+        if config.showSelectedIndex,
            let index = nav?.arrSelectedModels.firstIndex(where: { $0 == model }) {
             setCellIndex(cell, showIndexLabel: true, index: index + 1)
         } else {
@@ -1348,7 +1346,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     private func setCellIndex(_ cell: ZLThumbnailPhotoCell?, showIndexLabel: Bool, index: Int) {
-        guard ZLPhotoUIConfiguration.default().showSelectedIndex else {
+        guard ZLPhotoConfiguration.default().showSelectedIndex else {
             return
         }
         cell?.index = index
@@ -1357,9 +1355,9 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
     
     private func refreshCellIndexAndMaskView() {
         refreshCameraCellStatus()
-        
+        let config = ZLPhotoConfiguration.default()
         let uiConfig = ZLPhotoUIConfiguration.default()
-        let showIndex = uiConfig.showSelectedIndex
+        let showIndex = config.showSelectedIndex
         let showMask = uiConfig.showSelectedMask || uiConfig.showInvalidMask
         
         guard showIndex || showMask else {
