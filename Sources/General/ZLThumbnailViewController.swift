@@ -868,12 +868,11 @@ class ZLThumbnailViewController: UIViewController {
     }
     
     private func refreshDoneBtnFrame() {
-        let selCount = (navigationController as? ZLImageNavController)?.arrSelectedModels.count ?? 0
-        var doneTitle = localLanguageTextValue(.done)
-        if ZLPhotoConfiguration.default().showSelectCountOnDoneBtn, selCount > 0 {
-            doneTitle += "(" + String(selCount) + ")"
-        }
-        let doneBtnW = doneTitle.zl.boundingRect(font: ZLLayout.bottomToolTitleFont, limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)).width + 20
+        let doneBtnW = (doneBtn.currentTitle ?? "")
+            .zl.boundingRect(
+                font: ZLLayout.bottomToolTitleFont,
+                limitSize: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 30)
+            ).width + 20
         
         let btnY = showLimitAuthTipsView ? ZLLimitedAuthorityTipsView.height + ZLLayout.bottomToolBtnY : ZLLayout.bottomToolBtnY
         doneBtn.frame = CGRect(x: bottomView.bounds.width - doneBtnW - 15, y: btnY, width: doneBtnW, height: ZLLayout.bottomToolBtnH)
@@ -1234,7 +1233,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
         
         if config.showSelectedIndex,
            let index = nav?.arrSelectedModels.firstIndex(where: { $0 == model }) {
-            setCellIndex(cell, showIndexLabel: true, index: index + 1)
+            setCellIndex(cell, showIndexLabel: true, index: index + config.initialIndex)
         } else {
             cell.indexLabel.isHidden = true
         }
@@ -1383,7 +1382,7 @@ extension ZLThumbnailViewController: UICollectionViewDataSource, UICollectionVie
             for (index, selM) in arrSel.enumerated() {
                 if m == selM {
                     show = true
-                    idx = index + 1
+                    idx = index + config.initialIndex
                     isSelected = true
                     break
                 }
