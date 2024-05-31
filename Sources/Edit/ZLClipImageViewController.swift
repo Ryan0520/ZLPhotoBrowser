@@ -170,7 +170,7 @@ class ZLClipImageViewController: UIViewController {
         view.delegate = self
         view.dataSource = self
         view.backgroundColor = .clear
-        view.isHidden = clipRatios.count <= 1
+        view.alpha = 0
         view.showsHorizontalScrollIndicator = false
         ZLImageClipRatioCell.zl.register(view)
         return view
@@ -205,6 +205,8 @@ class ZLClipImageViewController: UIViewController {
     
     private var resetTimer: Timer?
     
+    private var showRatioColView: Bool { clipRatios.count > 1 }
+    
     var animate = true
     /// 用作进入裁剪界面首次动画frame
     var presentAnimateFrame: CGRect?
@@ -224,7 +226,9 @@ class ZLClipImageViewController: UIViewController {
     
     override var prefersHomeIndicatorAutoHidden: Bool { true }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        deviceIsiPhone() ? .portrait : .all
+    }
     
     deinit {
         zl_debugPrint("ZLClipImageViewController deinit")
@@ -298,6 +302,7 @@ class ZLClipImageViewController: UIViewController {
                 animateImageView.frame = self.clipBoxFrame
                 self.bottomToolView.alpha = 1
                 self.rotateBtn.alpha = 1
+                self.clipRatioColView.alpha = self.showRatioColView ? 1 : 0
             }) { _ in
                 UIView.animate(withDuration: 0.1, animations: {
                     self.mainScrollView.alpha = 1
@@ -313,15 +318,14 @@ class ZLClipImageViewController: UIViewController {
             mainScrollView.alpha = 1
             overlayView.alpha = 1
             shadowView.alpha = 1
+            clipRatioColView.alpha = clipRatios.count <= 1 ? 0 : 1
         }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        guard shouldLayout else {
-            return
-        }
+        guard shouldLayout else { return }
         shouldLayout = false
         
         mainScrollView.frame = view.bounds
@@ -445,13 +449,15 @@ class ZLClipImageViewController: UIViewController {
         let editScale = min(maxClipRect.width / editSize.width, maxClipRect.height / editSize.height)
         let scaledSize = CGSize(width: floor(editSize.width * editScale), height: floor(editSize.height * editScale))
         
+        // 计算当前裁剪rect区域
         var frame = CGRect.zero
         frame.size = scaledSize
         frame.origin.x = maxClipRect.minX + floor((maxClipRect.width - frame.width) / 2)
         frame.origin.y = maxClipRect.minY + floor((maxClipRect.height - frame.height) / 2)
         
-        // 按照edit image进行计算最小缩放比例
-        let originalScale = min(maxClipRect.width / editImage.size.width, maxClipRect.height / editImage.size.height)
+        // 按照edit image进行计算缩放比例
+        let originalScale = max(frame.width / editImage.size.width, frame.height / editImage.size.height)
+        
         // 将 edit rect 相对 originalScale 进行缩放，缩放到图片未放大时候的clip rect
         let scaleEditSize = CGSize(width: editRect.width * originalScale, height: editRect.height * originalScale)
         // 计算缩放后的clip rect相对maxClipRect的比例
@@ -893,7 +899,7 @@ class ZLClipImageViewController: UIViewController {
                 self.mainScrollView.contentOffset = offset
             }
             self.rotateBtn.alpha = 1
-            self.clipRatioColView.alpha = 1
+            self.clipRatioColView.alpha = self.showRatioColView ? 1 : 0
             if !self.dimClippedAreaDuringAdjustments {
                 self.shadowView.alpha = 1
             }
