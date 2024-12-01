@@ -181,7 +181,7 @@ class ViewController: UIViewController {
             .imageStickerContainerView(ImageStickerContainerView())
 //            .tools([.draw, .clip, .mosaic, .filter])
 //            .adjustTools([.brightness, .contrast, .saturation])
-//            .clipRatios([.custom, .circle, .wh1x1, .wh3x4, .wh16x9, ZLImageClipRatio(title: "2 : 1", whRatio: 2 / 1)])
+            .clipRatios(ZLImageClipRatio.all)
 //            .imageStickerContainerView(ImageStickerContainerView())
 //            .filters([.normal, .process, ZLFilter(name: "custom", applier: ZLCustomFilter.hazeRemovalFilter)])
         
@@ -354,6 +354,10 @@ class ViewController: UIViewController {
     }
     
     @objc func showCamera() {
+        // To enable tap-to-record you can also use tapToRecordVideo flag in camera config, for example:
+        // ZLPhotoConfiguration.default().cameraConfiguration = ZLPhotoConfiguration.default().cameraConfiguration
+        //  .tapToRecordVideo(true)
+        
         let camera = ZLCustomCamera()
         camera.takeDoneBlock = { [weak self] image, videoUrl in
             self?.save(image: image, videoUrl: videoUrl)
@@ -364,8 +368,8 @@ class ViewController: UIViewController {
     func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
             let hud = ZLProgressHUD.show(toast: .processing)
-            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
-                if suc, let asset = asset {
+            ZLPhotoManager.saveImageToAlbum(image: image) { [weak self] error, asset in
+                if error == nil, let asset {
                     let resultModel = ZLResultModel(asset: asset, image: image, isEdited: false, index: 0)
                     self?.selectedResults = [resultModel]
                     self?.selectedImages = [image]
@@ -378,8 +382,8 @@ class ViewController: UIViewController {
             }
         } else if let videoUrl = videoUrl {
             let hud = ZLProgressHUD.show(toast: .processing)
-            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
-                if suc, let asset = asset {
+            ZLPhotoManager.saveVideoToAlbum(url: videoUrl) { [weak self] error, asset in
+                if error == nil, let asset {
                     self?.fetchImage(for: asset)
                 } else {
                     debugPrint("保存视频到相册失败")
